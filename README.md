@@ -12,7 +12,6 @@ source venv/bin/activate
 pip3 install -r requirements.txt
 ```
 ## AWS Setup
-```
 - Create IAM User called MoviesAPI
 - Create S3 Bucket
 - Turn off blocking public access
@@ -25,4 +24,3 @@ pip3 install -r requirements.txt
     - Principal: `MoviesAPI` - IAM user
     - Actions: `Put/Get/Delete Object`
     - Resource: bucket arn adress + `/*`; Example: `arn:aws:s3:::mybucket/*`
-```
