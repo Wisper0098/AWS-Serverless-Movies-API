@@ -1,0 +1,5 @@
+export AWS_SERVER_PUBLIC_KEY=""
+export AWS_SERVER_SECRET_KEY=""
+export REGION_NAME=""
+export BUCKET_NAME=""
+export DYNAMODB_TABLE_NAME=""
