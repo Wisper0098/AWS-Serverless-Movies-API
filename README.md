@@ -1,5 +1,13 @@
 # AWS-Serverless-Movies-API
 
+The Serverless Movies API is a FastAPI-based web service designed to interact with a serverless movie database hosted on AWS DynamoDB. This API provides several endpoints:
+
+- **Get All Movies:** Retrieve information about all movies stored in the database. If the database is empty, it automatically initializes it by adding 100 items from a CSV file (`movies.csv`).
+- **Get Movies by Year:** Retrieve movies released in a specific year.
+- **Get Movie by Name:** Retrieve details about a movie based on its name.
+
+The API leverages FastAPI's capabilities to handle HTTP requests efficiently and responds with JSON data containing movie information such as title, release year, genre, and cover URL.
+
 ## Cloning repository
 ```
 git clone https://github.com/Wisper0098/AWS-Serverless-Movies-API
@@ -53,10 +61,50 @@ pip3 install -r requirements.txt
 - `dynamodb:UpdateItem`
 2. Save the policies.
 
-### Setup config.py 
-Put your keys from .csv file etc.
+### Environment variables for test
+1. Fill `env_vars.bashrc` with your data
+2. Run `source env_vars.bashrc` 
 
-### Test your application 
+### Test API
 1. Ensure you activated virtual environment and installed required libraries
 2. Run application using command: `uvicorn app.main:app --reload`
-3. Go on the `localhost:8000/docs` and check out all API requests 
+3. Go to the `localhost:8000/docs` and check out all API requests
+4. If everything is working, stop your application and delete `env_vars.bashrc`
+
+### Zip up site-packages and app folders
+1. Change directory: `cd venv/lib/python3.10/site-packages/`
+2. Zip libraries using this command: `zip -r9 ../../../../function.zip .`
+3. Go back to project root directory and add `app` folder into your `function.zip` using this command:
+   - `zip -g ./function.zip app`
+
+### Upload your function.zip to S3 Bucket
+1. Go to `serverless-movies-api` folder in your S3 Bucket
+2. Upload there your `function.zip` file
+3. Copy the Object URL of this file
+
+### Create Lambda function in AWS
+1. Name: `MoviesAPI-lambda`
+2. Runtime: `Python 3.10`
+3. Leave everything else by default, and create function
+
+### Lambda setup
+1. Got to the Code Source and click on the `Upload from` button
+2. Choose Amazon S3 location and paste link to your `function.zip`
+3. After that, go to Runtime settings and change default handler to `app.main.handler`
+4. Go to the Configuration and choose Environment variables
+5. Add there these variables: `AWS_SERVER_PUBLIC_KEY; AWS_SERVER_SECRET_KEY; BUCKET_NAME; DYNAMODB_TABLE_NAME; REGION_NAME`
+
+### Test Lambda function
+1. Create new test event
+2. Template: `apigateway-aws-proxy`
+3. Change path to `/api/v1/`
+4. And change HTTP method to `"GET"`
+5. Run test
+
+### Create Function URL
+1. Go to Configuration and choose Function URL
+2. Click Create function URL
+3. In Auth type choose `NONE` and click Save
+4. Copy function URL and add `/docs` to check out available requests
+5. Example `https://$AWS_ID.lambda-url.$AWS_REGION.on.aws/docs`
+6. Congragulations! 
