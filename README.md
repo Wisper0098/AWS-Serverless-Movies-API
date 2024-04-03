@@ -52,3 +52,11 @@ pip3 install -r requirements.txt
 - `dynamodb:PutItem`
 - `dynamodb:UpdateItem`
 2. Save the policies.
+
+### Setup config.py 
+Put your keys from .csv file etc.
+
+### Test your application 
+1. Ensure you activated virtual environment and installed required libraries
+2. Run application using command: `uvicorn app.main:app --reload`
+3. Go on the `localhost:8000/docs` and check out all API requests 
